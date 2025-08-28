@@ -1,17 +1,15 @@
-import { Component, computed, inject, Input, signal } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { SharedModule } from '../../../../shared.module';
-import { QuizStore } from '../../store/quiz.store';
 
 @Component({
-    selector: 'app-done',
-    imports: [SharedModule],
-    templateUrl: './done.component.html',
-    styleUrl: './done.component.scss'
+  selector: 'app-done',
+  imports: [SharedModule],
+  templateUrl: './done.component.html',
+  styleUrl: './done.component.scss',
 })
 export class DoneComponent {
-  readonly store = inject(QuizStore);
-  readonly correct = this.store.correctCount;
-  readonly total = this.store.questionsCount;
+  readonly correct = input.required<number>();
+  readonly total = input.required<number>();
 
   readonly score = computed(() => this.correct() / this.total());
 }

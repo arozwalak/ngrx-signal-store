@@ -77,5 +77,20 @@ export const QuizStore = signalStore(
     generateQuiz: () => store._load(),
   })),
   withLocalStorage('quiz-store'),
-  withDevtools('quiz-store')
+  withDevtools('quiz-store'),
+  withHooks((store) => ({
+    onInit: () => {
+      const stateJson = localStorage.getItem('quiz');
+      if (stateJson) {
+        const state = JSON.parse(stateJson) as QuizSlice;
+        patchState(store, state);
+      }
+
+      effect(() => {
+        const state = getState(store);
+        const stateJson = JSON.stringify(state);
+        localStorage.setItem('quiz', stateJson);
+      });
+    },
+  }))
 );
