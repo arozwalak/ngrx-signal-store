@@ -1,6 +1,6 @@
 <h1>
-  {{store.title()}} @for (record of store.captionColors(); track $index)
-  { @if($index > 0) { @if ($last) { and } @else { , } }
+  {{ store.title() }} @for (record of store.captionColors(); track $index) {
+  @if($index > 0) { @if ($last) { and } @else { , } }
 
   {{ record.name }}
   <span class="color-item" [style.background]="record.key"></span>

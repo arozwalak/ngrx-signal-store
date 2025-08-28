@@ -4,12 +4,14 @@ import { DICTIONARIES_TOKEN } from './tokens/dictionaries.token';
 import { DICTIONARIES } from './data/dictionaries';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
+import { QuizStore } from './features/quiz/store/quiz.store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
-    provideZoneChangeDetection({ eventCoalescing: true }), 
-    { provide: DICTIONARIES_TOKEN, useValue: DICTIONARIES }
-  ]
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    { provide: DICTIONARIES_TOKEN, useValue: DICTIONARIES },
+    QuizStore,
+  ],
 };
