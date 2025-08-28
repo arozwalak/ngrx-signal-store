@@ -1,7 +1,7 @@
-<app-toolbar/>
-<img src="background.jpg">
-<app-items-list/>
+<app-toolbar />
+<img src="background.jpg" />
+<app-items-list />
 
-@if (isCartShowing()) {
-    <app-cart/>
+@if (store.cartVm().isVisible) {
+<app-cart />
 }
