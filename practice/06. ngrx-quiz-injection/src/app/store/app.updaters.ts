@@ -13,3 +13,12 @@ export function changeLanguage(
     };
   };
 }
+
+export function resetLanguages(
+  languages: string[]
+): PartialStateUpdater<AppSlice> {
+  return (_) => ({
+    possibleLanguages: languages,
+    selectedLanguage: languages[0],
+  });
+}
