@@ -1,7 +1,7 @@
 export interface CartSlice {
-    readonly taxRate: number;
+  readonly taxRate: number;
 }
 
 export const initialCartSlice: CartSlice = {
-    taxRate: 0.08
-}
+  taxRate: 0.08,
+};
