@@ -7,7 +7,7 @@ import { ProductListStore } from './store/product-list.store';
   imports: [ProductCardComponent],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss',
-  providers: [],
+  providers: [ProductListStore],
 })
 export class ProductListComponent {
   readonly store = inject(ProductListStore);

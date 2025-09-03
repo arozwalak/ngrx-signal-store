@@ -8,7 +8,7 @@ import { CartStore } from './store/cart.store';
   imports: [SharedModule, CartItemComponent],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
-  providers: [],
+  providers: [CartStore],
 })
 export class CartComponent {
   readonly store = inject(CartStore);
