@@ -1,4 +1,10 @@
-import { signalStore, withComputed, withProps, withState } from '@ngrx/signals';
+import {
+  signalStore,
+  withComputed,
+  withMethods,
+  withProps,
+  withState,
+} from '@ngrx/signals';
 import { initialProductListSlice } from './product-list.slice';
 import { buildProductListVm } from './product-list.vm-builder';
 import { computed, inject } from '@angular/core';
@@ -17,5 +23,9 @@ export const ProductListStore = signalStore(
         store._shopStore.cartQuantities()
       )
     ),
+  })),
+  withMethods((store) => ({
+    addToCart: store._shopStore.addToCart,
+    viewCart: store._shopStore.viewCart,
   }))
 );
