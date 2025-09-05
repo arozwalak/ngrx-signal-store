@@ -1,7 +1,6 @@
 import {
   patchState,
   signalStore,
-  withComputed,
   withHooks,
   withMethods,
   withProps,
@@ -9,17 +8,15 @@ import {
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { initialAppSlice } from './app.slice';
-import { computed, inject } from '@angular/core';
-import { DICTIONARIES_TOKEN } from '../tokens/dictionaries.token';
+import { inject } from '@angular/core';
 import {
   changeLanguage,
   resetLanguages,
   setBusy,
   setDictionary,
 } from './app.updaters';
-import { getDictionary } from './app.helpers';
 import { DictionariesService } from '../services/dictionaries.service';
-import { firstValueFrom, tap, delay } from 'rxjs';
+import { tap, delay } from 'rxjs';
 
 export const AppStore = signalStore(
   { providedIn: 'root' },
@@ -34,24 +31,28 @@ export const AppStore = signalStore(
     };
   }),
   withMethods((store) => {
-    const _invalidateDictionary = async () => {
-      patchState(store, setBusy(true));
-      const dictionary = await firstValueFrom(
-        store._dictionariesService.getDictionaryWithDelay(
-          store.selectedLanguage()
-        )
-      );
-      patchState(store, setBusy(false), setDictionary(dictionary));
-    };
+    const _invalidateDictionary = rxMethod<string>((input$) =>
+      input$.pipe(
+        tap((lang) => {
+          console.log('invalidate dictionary for language', lang);
+          patchState(store, setBusy(true));
+        }),
+        delay(1000),
+        tap((lang) => {
+          console.log('completed invalidate dictionary for language', lang);
+          patchState(store, setBusy(false));
+        })
+      )
+    );
 
     return {
       changeLanguage: async () => {
         patchState(store, changeLanguage(store._languages));
-        await _invalidateDictionary();
+        await _invalidateDictionary(store.selectedLanguage());
       },
       _resetLanguages: async () => {
         patchState(store, resetLanguages(store._languages));
-        await _invalidateDictionary();
+        await _invalidateDictionary(store.selectedLanguage());
       },
     };
   }),
