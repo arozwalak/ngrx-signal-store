@@ -16,7 +16,7 @@ import {
   setDictionary,
 } from './app.updaters';
 import { DictionariesService } from '../services/dictionaries.service';
-import { delay, firstValueFrom, map, mergeAll, tap } from 'rxjs';
+import { map, mergeAll, switchAll, tap } from 'rxjs';
 
 export const AppStore = signalStore(
   { providedIn: 'root' },
@@ -31,17 +31,18 @@ export const AppStore = signalStore(
     };
   }),
   withMethods((store) => {
-    const _invalidateDictionary = rxMethod<string>(input$ => {
+    const _invalidateDictionary = rxMethod<string>((input$) => {
       const output$ = input$.pipe(
-        tap(_ => patchState(store, setBusy(true))),
-        delay(1000),
-        tap(_ => patchState(store, setBusy(false)))
+        tap((_) => patchState(store, setBusy(true))),
+        map((lang) => store._dictionariesService.getDictionaryWithDelay(lang)),
+        switchAll(),
+        tap((dictionary) => {
+          patchState(store, setDictionary(dictionary), setBusy(false));
+        })
       );
 
       return output$;
-    })
-
-
+    });
 
     return {
       changeLanguage: () => {
